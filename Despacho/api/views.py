@@ -16,16 +16,17 @@ from .serializers import EnvioSerializers, EntregaSerializers
 class EnvioGet(APIView):
     serializer_class = EnvioSerializers
     
-    def get(self,request, id=0):
-        if(id > 0):
-            envio=Envio.objects.filter(id=id).all()
+    def get(self,request, rut=0):
+        if(rut > 0):
+            envio=Envio.objects.filter(rut=rut).values()
             if len(envio) > 0:
                 envios = envio[0]
-                datos = {'envio':envio}
+                datos = {'envio':envios}
             else:
-                datos={'envio':envio}
-            serializer=EnvioSerializers(envio,many=True)    
-            return Response(serializer.data)
+                datos={'message':'rut no encontrado'}
+            return JsonResponse(datos)
+                
+            
         else:    
             envio=Envio.objects.all()
             if len(envio)>0:
@@ -35,7 +36,7 @@ class EnvioGet(APIView):
             serializer=EnvioSerializers(envio,many=True)  
             return Response(serializer.data)   
  
-
+    
 
             
   
@@ -74,9 +75,11 @@ class EntregaVista(View):
                 datos={'message':'not found'}
             return JsonResponse(datos)
     
-    def put(self, request):
-        pass
+class Eliminar(APIView):
     
-    def delete(self, request):
-        pass
+    def delete(self, request, id):
+        eliminarEnvio = Envio.objects.get(id=id)
+        eliminarEnvio.delete()
+        datos = {'message':'eliminado con exito'}
+        return JsonResponse(datos)
     
