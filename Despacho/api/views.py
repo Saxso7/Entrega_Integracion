@@ -82,4 +82,55 @@ class Eliminar(APIView):
         eliminarEnvio.delete()
         datos = {'message':'eliminado con exito'}
         return JsonResponse(datos)
+
+class EntregaPost(APIView):
     
+    serializer_class = EntregaSerializers
+        
+    def post(self, request, *args, **kwargs):
+        entregaCrear = request.data
+        print(entregaCrear)
+        entregaCreado = Entrega.objects.create(nombre=entregaCrear['nombre'],rut=entregaCrear['rut'],
+                            direccion=entregaCrear['direccion'],nroSeguimiento=entregaCrear['nroSeguimiento'],
+                            producto=entregaCrear['producto'],cantidad=entregaCrear['cantidad'],
+                            precio=entregaCrear['precio'],cargoEntrega=entregaCrear['cargoEntrega'],
+                            entregaRealizada=entregaCrear['entregaRealizada'])
+                            
+        
+        entregaCreado.save()
+        
+        serializer = EntregaSerializers(entregaCreado)
+        
+        return Response(serializer.data)
+    
+class EntregaGet(APIView):
+    
+    serializer_class = EntregaSerializers
+    
+    def get(self,request, id=0):
+        if(id > 0):
+            entrega=Entrega.objects.filter(id=id).values()
+            if len(entrega) > 0:
+                entrega = entrega[0]
+                datos = {'entrega':entrega}
+            else:
+                datos={'message':'id no encontrado'}
+            return JsonResponse(datos)
+                
+            
+        else:    
+            entrega=Entrega.objects.all()
+            if len(entrega)>0:
+                datos={'entrega':entrega}
+            else:
+                datos={'message':'not found'}
+            serializer=EntregaSerializers(entrega,many=True)  
+            return Response(serializer.data)   
+        
+class EliminarEntrega(APIView):
+    
+    def delete(self, request, id):
+        eliminarEntrega = Entrega.objects.get(id=id)
+        eliminarEntrega.delete()
+        datos = {'message':'eliminado con exito'}
+        return JsonResponse(datos)

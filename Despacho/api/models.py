@@ -19,4 +19,4 @@ class Entrega(models.Model):
     cantidad=models.CharField(max_length=2)
     precio=models.CharField(max_length=8)
     cargoEntrega=models.IntegerField()
-    entregaRealizada=models.BooleanField()
+    entregaRealizada=models.CharField(max_length=2)

@@ -84,7 +84,7 @@ DATABASES = {
         'PORT':'3306',
         'USER':'root',
         'PASSWORD':'*MySql1234',
-        'NAME':'api2',
+        'NAME':'api',
         'OPTIONS':{
             'init_command':"SET sql_mode='STRICT_TRANS_TABLES'"
         }
