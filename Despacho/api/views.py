@@ -1,12 +1,9 @@
 from os import stat
 from django.http import JsonResponse
 from django.views.decorators.csrf import csrf_exempt
-from yaml import serialize
 from .models import Envio,Entrega, Auth
 from rest_framework import status, generics
-from rest_framework.decorators import api_view, permission_classes
-from rest_framework.permissions import IsAuthenticated
-from rest_framework.authentication import TokenAuthentication
+from rest_framework.decorators import api_view
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from .serializers import EnvioSerializers, EntregaSerializers, AuthUser
@@ -55,28 +52,8 @@ class EnvioVistaPost(APIView):
         
         return Response(serializer.data)
     
-'''class EntregaVista(View):
-    
-    def get(self, request, id=0):
-        if(id > 0):
-            entrega=list(Entrega.objects.filter(id=id).values())
-            if len(entrega) > 0:
-                entrega = entrega[0]
-                datos = {'entrega':entrega}
-            else:
-                datos={'entrega':entrega}
-            return JsonResponse(datos)
-        else:    
-            entrega=list(Entrega.objects.values())
-            if len(entrega)>0:
-                datos={'entrega':entrega}
-            else:
-                datos={'message':'not found'}
-            return JsonResponse(datos)'''
-    
 @csrf_exempt
-@api_view(['GET','POST'])
-@permission_classes((IsAuthenticated,))    
+@api_view(['GET','POST'])   
 def entrega(request):
     if request.method == 'GET':
         entregar = Entrega.objects.all()
@@ -91,6 +68,7 @@ def entrega(request):
         else:
             return Response(serializers.errors, status=status.HTTP_400_BAD_REQUEST)
     
+    
 class Eliminar(APIView):
     
     def delete(self, request, id):
@@ -99,40 +77,6 @@ class Eliminar(APIView):
         datos = {'message':'eliminado con exito'}
         return JsonResponse(datos)
 
-'''@api_view(['POST'])
-def EntregaPost(request):
-    serializer = EntregaSerializers(data=request.data)
-    if serializer.is_valid():
-        serializer.save()
-    else:
-        return Response(serializer.errors)
-
-    return Response(serializer.data)
-    
-class EntregaGet(APIView):
-    
-    serializer_class = EntregaSerializers
-    
-    def get(self,request, id=0):
-        if(id > 0):
-            entrega=Entrega.objects.filter(id=id).values()
-            if len(entrega) > 0:
-                entrega = entrega[0]
-                datos = {'entrega':entrega}
-            else:
-                datos={'message':'id no encontrado'}
-            return JsonResponse(datos)
-                
-            
-        else:    
-            entrega=Entrega.objects.all()
-            if len(entrega)>0:
-                datos={'entrega':entrega}
-            else:
-                datos={'message':'not found'}
-            serializer=EntregaSerializers(entrega,many=True)  
-            return Response(serializer.data)   
-        '''
 class EliminarEntrega(APIView):
     
     def delete(self, request, id):

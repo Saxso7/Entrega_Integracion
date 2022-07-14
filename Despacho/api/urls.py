@@ -1,6 +1,6 @@
 from django.urls import path
 from . import views
-from . import viewsLogin
+
 
 urlpatterns = [
     path('envioGet',views.EnvioGet.as_view(), name='ver envio'),
@@ -8,6 +8,5 @@ urlpatterns = [
     path('envioPost',views.EnvioVistaPost.as_view(), name='crear envio'),
     path('envioDelete/<int:id>',views.Eliminar.as_view(),name='eliminar envio <id>'),
     path('lista_entrega',views.entrega, name='lista_entrega'),
-    path('entregaDelete/<int:id>',views.EliminarEntrega.as_view(),name='eliminar entrega <id>'),
-    path ('login',viewsLogin.login,name='login')
+    path('entregaDelete/<int:id>',views.EliminarEntrega.as_view(),name='eliminar entrega <id>')
 ]
