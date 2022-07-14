@@ -32,7 +32,7 @@ def index(request):
 
 
 def inicio(request):
-    return render(request,'dashboard.html',{
+    return render(request,'login.html',{
         
     })
     
