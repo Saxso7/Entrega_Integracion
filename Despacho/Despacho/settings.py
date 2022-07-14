@@ -25,7 +25,7 @@ SECRET_KEY = 'django-insecure-1gy9dhy2z^&plotm+^fm=zsk5ot)+hpf0$3*2um$rb@kmhxjax
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['34.237.16.12','127.0.0.1']
 
 
 # Application definition
@@ -85,7 +85,7 @@ DATABASES = {
         'PORT':'3306',
         'USER':'root',
         'PASSWORD':'*MySql1234',
-        'NAME':'api2',
+        'NAME':'api',
         'OPTIONS':{
             'init_command':"SET sql_mode='STRICT_TRANS_TABLES'"
         }

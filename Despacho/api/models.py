@@ -7,6 +7,7 @@ class Envio(models.Model):
     nombre=models.CharField(max_length=50)
     rut=models.IntegerField()
     direccion=models.CharField(max_length=60)
+    producto=models.CharField(max_length=20)
     cantidad=models.IntegerField()
     precio=models.IntegerField()
 
