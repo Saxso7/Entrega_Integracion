@@ -1,15 +1,17 @@
-from email import message
-import json
-from django.utils.decorators import method_decorator
+from os import stat
 from django.http import JsonResponse
-from django.views import View
 from django.views.decorators.csrf import csrf_exempt
 from yaml import serialize
-from .models import Envio,Entrega
-from rest_framework.decorators import api_view
+from .models import Envio,Entrega, Auth
+from rest_framework import status, generics
+from rest_framework.decorators import api_view, permission_classes
+from rest_framework.permissions import IsAuthenticated
+from rest_framework.authentication import TokenAuthentication
 from rest_framework.views import APIView
 from rest_framework.response import Response
-from .serializers import EnvioSerializers, EntregaSerializers
+from .serializers import EnvioSerializers, EntregaSerializers, AuthUser
+from rest_framework.parsers import JSONParser
+
 
 # Create your views here.
 
@@ -36,10 +38,7 @@ class EnvioGet(APIView):
             serializer=EnvioSerializers(envio,many=True)  
             return Response(serializer.data)   
  
-    
-
-            
-  
+      
 class EnvioVistaPost(APIView):  
     serializer_class = EnvioSerializers
         
@@ -56,7 +55,7 @@ class EnvioVistaPost(APIView):
         
         return Response(serializer.data)
     
-class EntregaVista(View):
+'''class EntregaVista(View):
     
     def get(self, request, id=0):
         if(id > 0):
@@ -73,7 +72,24 @@ class EntregaVista(View):
                 datos={'entrega':entrega}
             else:
                 datos={'message':'not found'}
-            return JsonResponse(datos)
+            return JsonResponse(datos)'''
+    
+@csrf_exempt
+@api_view(['GET','POST'])
+@permission_classes((IsAuthenticated,))    
+def entrega(request):
+    if request.method == 'GET':
+        entregar = Entrega.objects.all()
+        serializers = EntregaSerializers(entregar, many=True)
+        return Response(serializers.data)
+    elif request.method == 'POST':
+        data = JSONParser().parse(request)
+        serializers = EntregaSerializers(data=data)
+        if serializers.is_valid():
+            serializers.save()
+            return Response(serializers.data, status=status.HTTP_201_CREATED)
+        else:
+            return Response(serializers.errors, status=status.HTTP_400_BAD_REQUEST)
     
 class Eliminar(APIView):
     
@@ -83,25 +99,15 @@ class Eliminar(APIView):
         datos = {'message':'eliminado con exito'}
         return JsonResponse(datos)
 
-class EntregaPost(APIView):
-    
-    serializer_class = EntregaSerializers
-        
-    def post(self, request, *args, **kwargs):
-        entregaCrear = request.data
-        print(entregaCrear)
-        entregaCreado = Entrega.objects.create(nombre=entregaCrear['nombre'],rut=entregaCrear['rut'],
-                            direccion=entregaCrear['direccion'],nroSeguimiento=entregaCrear['nroSeguimiento'],
-                            producto=entregaCrear['producto'],cantidad=entregaCrear['cantidad'],
-                            precio=entregaCrear['precio'],cargoEntrega=entregaCrear['cargoEntrega'],
-                            entregaRealizada=entregaCrear['entregaRealizada'])
-                            
-        
-        entregaCreado.save()
-        
-        serializer = EntregaSerializers(entregaCreado)
-        
-        return Response(serializer.data)
+'''@api_view(['POST'])
+def EntregaPost(request):
+    serializer = EntregaSerializers(data=request.data)
+    if serializer.is_valid():
+        serializer.save()
+    else:
+        return Response(serializer.errors)
+
+    return Response(serializer.data)
     
 class EntregaGet(APIView):
     
@@ -126,7 +132,7 @@ class EntregaGet(APIView):
                 datos={'message':'not found'}
             serializer=EntregaSerializers(entrega,many=True)  
             return Response(serializer.data)   
-        
+        '''
 class EliminarEntrega(APIView):
     
     def delete(self, request, id):
@@ -134,3 +140,8 @@ class EliminarEntrega(APIView):
         eliminarEntrega.delete()
         datos = {'message':'eliminado con exito'}
         return JsonResponse(datos)
+
+class Usuario(generics.ListCreateAPIView):
+    queryset = Auth.objects.all()
+    serializer_class = AuthUser
+    

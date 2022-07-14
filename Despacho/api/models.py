@@ -20,3 +20,7 @@ class Entrega(models.Model):
     precio=models.CharField(max_length=8)
     cargoEntrega=models.IntegerField()
     entregaRealizada=models.CharField(max_length=2)
+    
+class Auth(models.Model):
+    usuario=models.CharField(max_length=8)
+    password=models.CharField(max_length=10)
