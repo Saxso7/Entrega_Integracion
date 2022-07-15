@@ -75,3 +75,7 @@ def search(request):
     }
 
     return render(request, template_name, data)
+
+def usuario(request):
+    template_name = 'main/user.html'
+    return render(request, template_name)

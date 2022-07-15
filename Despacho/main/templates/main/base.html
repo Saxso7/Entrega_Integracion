@@ -14,6 +14,7 @@
 
     <!-- Bootstrap core CSS     -->
     <link href="{% static 'main/css/bootstrap.min.css' %}" rel="stylesheet" />
+    <script src="{% static 'main/js/main.js' %}"></script>
 
     <!-- Animation library for notifications   -->
     <link href="{% static 'main/css/animate.min.css' %}" rel="stylesheet"/>
@@ -48,37 +49,38 @@
     	<div class="sidebar-wrapper">
             <div class="logo">
                 <a href="#" class="simple-text">
-                    Despacho
+                    Bienvenidos
                 </a>
                 
-                <i class="fa fa-user"></i>
-                
-                <i class="fas fa-apple-alt"></i>
             </div>
 
             <ul class="nav">
                 <li class="active">
-                    <a href="index.html">
-                        <i class="fas fa-user"></i>
+                    <a href="{% url 'index' %}">
+                        <i class="fas fa-address-book"></i>
+                        
                         <p>Incio</p>
                     </a>
                 </li>
                 <li>
-                    <a href="user.html">
-                        <i class="pe-7s-user"></i>
+                    <a href="{% url 'usuario' %}">
+                        <li class="active">
+                            <i class="fas fa-user"></i>
                         <p>Perfil de usuario</p>
                     </a>
                 </li>
                 <li>
                     <a href="{% url 'buscar' %}">
-                        <i class="pe-7s-note2"></i>
+                        <li class="active">
+                            <i class="fas fa-bus"></i>
                         <p>Seguimiento pedidos</p>
                     </a>
                 </li>
                                 
                 <li>
-                    <a href="maps.html">
-                        <i class="pe-7s-map-marker"></i>
+                    <a href="{% url 'mapa' %}">
+                        <li class="active">
+                            <i class="fas fa-map-marker"></i>
                         <p>Oficinas</p>
                     </a>
                 </li>
@@ -105,7 +107,7 @@
                     <ul class="nav navbar-nav navbar-right">                       
                         
                         <li>
-                            <a href="login.html">
+                            <a href="{% url 'inicio' %}">
                                 <p>Log out</p>
                             </a>
                         </li>
@@ -137,7 +139,7 @@
 <!--   Core JS Files   -->
 <script src="{% static 'main/js/jquery.3.2.1.min.js' %}" type="text/javascript"></script>
 <script src="{% static 'main/js/bootstrap.min.js' %}" type="text/javascript"></script>
-
+<link rel="stylesheet" type="text/css" href="{% static 'main/css/main.css' %}">
 <!--  Charts Plugin -->
 <script src="{% static 'main/js/chartist.min.js' %}"></script>
 
@@ -145,7 +147,7 @@
 <script src="{% static 'main/js/bootstrap-notify.js' %}"></script>
 
 <!--  Google Maps Plugin    -->
-<script type="text/javascript" src="https://maps.googleapis.com/maps/api/js?key=YOUR_KEY_HERE"></script>
+<script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBDaeWicvigtP9xPv919E-RNoxfvC-Hqik&callback=iniciarMap"></script>
 
 <!-- Light Bootstrap Table Core javascript and methods for Demo purpose -->
 <script src="{% static 'main/js/light-bootstrap-dashboard.js' %}"></script>

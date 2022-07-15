@@ -1,6 +1,6 @@
 from django.urls import path
 #from . import views
-from .views import search,inicio,index,Mapas,buscarEnvio
+from .views import search,inicio,index,Mapas,buscarEnvio, usuario
 
 urlpatterns = [
     path('',inicio, name='inicio'),
@@ -11,6 +11,7 @@ urlpatterns = [
     path('maps',Mapas,name='mapa'),
 
     path('table',buscarEnvio, name='buscar'),
+    path('user',usuario, name='usuario'),
     
     path('search/',search,name="search")
 ]
