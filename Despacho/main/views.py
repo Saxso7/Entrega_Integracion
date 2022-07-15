@@ -1,43 +1,77 @@
-from django.urls import reverse_lazy
-from django.utils.decorators import method_decorator
-from django.views.decorators.cache import never_cache
-from django.views.decorators.csrf import csrf_protect
-from django.views.generic.edit import FormView
-from django.contrib.auth import login,logout,authenticate
-from django.http import HttpResponseRedirect
-from django.contrib.auth.forms import AuthenticationForm
+from django.contrib.auth import login, logout, authenticate
 from django.shortcuts import render
-from rest_framework.authtoken.models import Token
+from django.db.models import Q
+from api import serializers
+from api.models import Envio
+from django.shortcuts import redirect
+from django.contrib.auth import authenticate
 
-import requests, json, MySQLdb
+import requests
+import json
+import MySQLdb
 
-conexion = MySQLdb.connect(host='localhost', user='root', password= '*MySql1234',db='api',)
+
+conexion = MySQLdb.connect(
+    host='localhost', user='root', password='*MySql1234', db='api',)
+
 
 def index(request):
-    url = 'http://127.0.0.1:8000/api/envioGet'
-    response = requests.get(url)
-    
-    
-            
-    response_json = json.loads(response.content)
-    print(response_json)
-        
-         
-             
-    return render(request, 'index.html',{
-        'response_json': response_json,
-        'despacho':'Pagina de despacho'
+
+    return render(request, 'main/index.html', {
+        'despacho': 'Pagina de despacho'
     })
 
+
+def buscarEnvio(request):
+    ventas = Envio.objects.all()
+    
+    search = request.POST.get("busqueda")
+
+    if (search):
+        for v in ventas:
+            if(v.nombre  == search):
+                ventas = Envio.objects.filter(
+                    Q(nombre__icontains = search)
+                )
+
+
+    
+    
+    
+
+    return render(request, 'main/table.html' ,{'ventas': ventas})
 
 
 def inicio(request):
-    return render(request,'login.html',{
-        
-    })
-    
+    if request.method == 'POST':
+        username = request.POST.get('username')
+        password = request.POST.get('password')
+
+        user = authenticate(username=username, password=password)
+        if user:
+            login(request, user)
+            print("logueado correctamente")
+            return redirect('index')
+
+        else:
+            print("Incorrecto")
+    return render(request, 'main/login.html')
+
+
 def Mapas(request):
-    return render(request,'maps.html',{
-        
+    return render(request, 'main/maps.html', {
+
     })
 
+
+def search(request):
+    template_name = 'main/table.html'
+    busqueda = request.GET["busqueda"]
+    ventas = Envio.objects.filter(
+        nombre__icontains=busqueda
+    )
+    data = {
+        'ventas': ventas
+    }
+
+    return render(request, template_name, data)

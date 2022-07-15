@@ -1,0 +1,133 @@
+{% extends 'main/base.html' %}
+
+{% load static %}
+
+{% block title %}
+    <title>Table</title>
+{% endblock title %}
+
+{% block contenido %}
+    <div class="wrapper">
+        <div class="sidebar" data-color="purple" data-image="assets/img/sidebar-5.jpg">
+
+            <!--   you can change the color of the sidebar using: data-color="blue | azure | green | orange | red | purple" -->
+
+
+            <div class="sidebar-wrapper">
+                <div class="logo">
+                    <a href="http://www.creative-tim.com" class="simple-text">
+                        Despacho
+                    </a>
+                </div>
+
+                <ul class="nav">
+                    <li>
+                        <a href="{% url 'index' %}">
+                            <i class="pe-7s-graph"></i>
+                            <p>Incio</p>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="user.html">
+                            <i class="pe-7s-user"></i>
+                            <p>Perfil de usuario</p>
+                        </a>
+                    </li>
+                    <li class="active">
+                        <a href="{% url 'buscar' %}">
+                            <i class="pe-7s-note2"></i>
+                            <p>Seguimiento pedidos</p>
+                        </a>
+                    </li>
+
+                    <li>
+                        <a href="maps.html">
+                            <i class="pe-7s-map-marker"></i>
+                            <p>Maps</p>
+                        </a>
+                    </li>
+
+
+                </ul>
+            </div>
+        </div>
+
+        <div class="main-panel">
+            <nav class="navbar navbar-default navbar-fixed">
+                <div class="container-fluid">
+                    <div class="navbar-header">
+                        <button type="button" class="navbar-toggle" data-toggle="collapse"
+                            data-target="#navigation-example-2">
+                            <span class="sr-only">Toggle navigation</span>
+                            <span class="icon-bar"></span>
+                            <span class="icon-bar"></span>
+                            <span class="icon-bar"></span>
+                        </button>
+                        <a class="navbar-brand" href="#">Seguimiento</a>
+                    </div>
+                    <div class="collapse navbar-collapse">
+
+                        <ul class="nav navbar-nav navbar-right">
+
+                            <li>
+                                <a href="login.html">
+                                    <p>Log out</p>
+                                </a>
+                            </li>
+                            <li class="separator hidden-lg hidden-md"></li>
+                        </ul>
+                    </div>
+                </div>
+            </nav>
+            
+            
+
+            <div class="content">
+                <div class="container-fluid">
+                    
+                  {% comment %}   <form action="" methods="POST" class="form-inline">
+                        {% csrf_token %}
+
+                        <input type="search" class="form-control mr-sm-2" name="busqueda" placeholder="Ingrese nombre" aria-label="search">
+
+                        <button class="btn btn-primary" type="submit">Buscar</button>
+                    </form> {% endcomment %}
+
+                    <form action="" method="POST">
+                        {% csrf_token %}
+                        <div class="input-group">
+                          <span class="input-group-text text-body">      
+                            <i class="fas fa-search" aria-hidden="true"></i>
+                          </span>    
+                          <input name="busqueda" type="text" class="form-control" placeholder="Escriba aquí...">
+                        </div>
+                    </form>
+                    
+                </div>
+                <div class="table-responsive">
+                    <table class="table table-hover ">
+                        <thead>
+
+                            <th>Nombre</th>
+
+                        </thead>
+                        <tbody>
+                            {% for venta in ventas %}
+                            <tr>
+                                <td>{{venta.nombre}}</td>
+
+                            </tr>
+
+                            {% endfor %}
+                        </tbody>
+
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    {% endblock contenido %}
+
+
+
